@@ -43,6 +43,13 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.shopping_basket,
               onTap: () => Navigator.pushNamed(context, '/cart'),
             ),
+            spaceBox(h: 25),
+            DrawerItem(
+              title: 'Adddress',
+              icon: Icons.shopping_cart_checkout,
+              onTap: () => Navigator.pushNamed(context, '/checkout'),
+            ),
+            spaceBox(h: 25),
             const Spacer(),
             DrawerItem(
               title: 'Quit APP',
