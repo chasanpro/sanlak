@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sanlak/Components/Product_card.dart';
 import 'package:sanlak/Components/drawer_item.dart';
 import 'package:sanlak/Components/reusables.dart';
 
@@ -13,6 +14,15 @@ class HomeScreen extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         elevation: 0,
         title: const Text('MARKET'),
+        actions: [
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/cart'),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.shopping_cart),
+            ),
+          )
+        ],
       ),
       drawer: Drawer(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -31,7 +41,7 @@ class HomeScreen extends StatelessWidget {
             DrawerItem(
               title: 'cart',
               icon: Icons.shopping_basket,
-              onTap: () => Navigator.pushNamed(context, '/home'),
+              onTap: () => Navigator.pushNamed(context, '/cart'),
             ),
             const Spacer(),
             DrawerItem(
@@ -42,6 +52,21 @@ class HomeScreen extends StatelessWidget {
             spaceBox(h: 25),
           ],
         ),
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 500,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: const [
+                ProductCard(),
+                ProductCard(),
+                ProductCard(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
