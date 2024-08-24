@@ -27,7 +27,7 @@ class IntroScreen extends StatelessWidget {
             ),
             spaceBox(h: 80),
             MyButton(
-                onTap: () => Navigator.pushNamed(context, '/home'),
+                onTap: () => Navigator.pushNamed(context, '/login'),
                 child: Container(
                   height: 80,
                   width: 80,

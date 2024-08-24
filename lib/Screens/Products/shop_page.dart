@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sanlak/Components/Product_card.dart';
 import 'package:sanlak/Components/drawer_item.dart';
 import 'package:sanlak/Components/reusables.dart';
+import 'package:sanlak/Screens/Products/shop_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,13 +14,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch products when the screen is initialized
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    productProvider.fetchAndSetProducts();
+  }
+
   String _selectedPriceOrder = 'Low to High';
 
   final Map<String, bool> _selectedCategories = {
-    'Category A': false,
-    'Category B': false,
-    'Category C': false,
-    'Category D': false,
+    'Books': false,
+    'Sports': false,
+    'Fashion': false,
+    'Electronics': false,
+    'Home Appliances': false,
   };
 
   void _showFilterDialog(BuildContext context) {
@@ -130,78 +142,28 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      drawer: Drawer(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: Column(
-          children: [
-            spaceBox(h: 190),
-            Icon(Icons.shopping_bag,
-                size: 90, color: Theme.of(context).colorScheme.inversePrimary),
-            spaceBox(h: 25),
-            DrawerItem(
-              title: 'Home',
-              icon: Icons.home,
-              onTap: () => Navigator.pushNamed(context, '/home'),
-            ),
-            spaceBox(h: 25),
-            DrawerItem(
-              title: 'cart',
-              icon: Icons.shopping_basket,
-              onTap: () => Navigator.pushNamed(context, '/cart'),
-            ),
-            spaceBox(h: 25),
-            DrawerItem(
-              title: 'Orders',
-              icon: Icons.list_alt_rounded,
-              onTap: () => Navigator.pushNamed(context, '/orders'),
-            ),
-            spaceBox(h: 25),
-            const Spacer(),
-            DrawerItem(
-              title: 'Quit APP',
-              icon: Icons.exit_to_app,
-              onTap: () => Navigator.pushNamed(context, '/login'),
-            ),
-            spaceBox(h: 25),
-          ],
-        ),
-      ),
       body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .9,
-              child: SingleChildScrollView(
-                scrollDirection: Axis
-                    .vertical, // You can change this to Axis.horizontal if needed
-                child: Wrap(
-                  children: [
-                    ProductCard(
-                      onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    ),
-                    ProductCard(
-                      onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    ),
-                    ProductCard(
-                      onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    ),
-                    ProductCard(
-                      onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    ),
-                    ProductCard(
-                      onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    ),
-                    ProductCard(
-                      onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    ),
-                    ProductCard(
-                      onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    ),
-                  ],
-                ),
+        child: Consumer<ProductProvider>(
+          builder: (context, productProvider, child) {
+            if (productProvider.products.isEmpty) {
+              return const CircularProgressIndicator(); // Show a loading indicator while fetching products
+            }
+
+            return SingleChildScrollView(
+              child: Wrap(
+                spacing: 10.0, // Space between products horizontally
+                runSpacing: 10.0, // Space between products vertically
+                children: productProvider.products.map((product) {
+                  return ProductCard(
+                    onTap: () => Navigator.pushNamed(context, '/productinfo'),
+                    price: '\$${product.price.toString()}',
+                    name: product.name,
+                    imageUrl: product.imageUrl,
+                  );
+                }).toList(),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

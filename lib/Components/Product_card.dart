@@ -3,9 +3,13 @@ import 'package:sanlak/Components/reusables.dart';
 
 class ProductCard extends StatelessWidget {
   final void Function()? onTap;
+  final String price, name, imageUrl;
   const ProductCard({
     super.key,
     @required this.onTap,
+    required this.price,
+    required this.name,
+    required this.imageUrl,
   });
 
   @override
@@ -35,7 +39,7 @@ class ProductCard extends StatelessWidget {
                 children: [
                   spaceBox(w: 30),
                   Text(
-                    'Intel Ultra 200',
+                    name,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.inversePrimary),
@@ -46,9 +50,9 @@ class ProductCard extends StatelessWidget {
               Row(
                 children: [
                   spaceBox(w: 30),
-                  const Text(
-                    '\$200',
-                    style: TextStyle(
+                  Text(
+                    '\$ $price',
+                    style: const TextStyle(
                         color: Color.fromARGB(255, 7, 151, 12),
                         fontWeight: FontWeight.w800),
                   ),

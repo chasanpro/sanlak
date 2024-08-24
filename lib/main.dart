@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sanlak/Core/AppProvider.dart';
+import 'package:sanlak/Screens/Products/shop_provider.dart';
 import 'package:sanlak/Screens/productInfo_screen.dart';
 import 'package:sanlak/Screens/login_screen.dart';
 import 'package:sanlak/Screens/cart_screen.dart';
 import 'package:sanlak/Screens/intro_screen.dart';
 import 'package:sanlak/Screens/orders.dart';
-import 'package:sanlak/Screens/shop_page.dart';
+import 'package:sanlak/Screens/Products/shop_page.dart';
 import 'package:sanlak/Screens/signup_Screen.dart';
 import 'package:sanlak/themes/light_theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppStateProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +37,7 @@ class MyApp extends StatelessWidget {
           '/introScreen': (context) => const IntroScreen(),
           '/home': (context) => const HomeScreen(),
           '/cart': (context) => const CartScreen(),
-          '/login': (context) => LoginScreen(),
+          '/login': (context) => const LoginScreen(),
           '/signup': (context) => SignupScreen(),
           '/orders': (context) => OrdersScreen(),
           '/productinfo': (context) => const ProductinfoScreen(),
