@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sanlak/Components/reusableText.dart';
 import 'package:sanlak/Components/reusables.dart';
 
 class ProductCard extends StatelessWidget {
@@ -26,7 +27,7 @@ class ProductCard extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
+            color: Colors.grey[200],
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
@@ -67,22 +68,19 @@ class ProductCard extends StatelessWidget {
                 spaceBox(h: 10),
                 Row(
                   children: [
-                    spaceBox(w: 30),
-                    Text(
+                    spaceBox(w: 20),
+                    MyText(
                       name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
+                      fontSize: 14,
                     ),
                     const Spacer(),
                   ],
                 ),
                 Row(
                   children: [
-                    spaceBox(w: 30),
+                    spaceBox(w: 20),
                     Text(
-                      '\$ $price',
+                      price,
                       style: const TextStyle(
                         color: Color.fromARGB(255, 7, 151, 12),
                         fontWeight: FontWeight.w800,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sanlak/Components/reusableText.dart';
 
 class DrawerItem extends StatelessWidget {
   final String title;
@@ -13,7 +14,7 @@ class DrawerItem extends StatelessWidget {
       padding: const EdgeInsets.only(left: 45),
       child: ListTile(
         leading: Icon(icon),
-        title: Text(title),
+        title: MyText(title),
         onTap: onTap,
       ),
     );
