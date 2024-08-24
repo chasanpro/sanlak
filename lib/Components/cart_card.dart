@@ -99,7 +99,7 @@ class _CartCardState extends State<CartCard> {
                       ),
                       Row(
                         children: [
-                          spaceBox(w: 50),
+                          spaceBox(w: 30),
                           Text(
                             'Quantity : ',
                             style: TextStyle(

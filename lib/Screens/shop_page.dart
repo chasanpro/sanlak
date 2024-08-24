@@ -54,26 +54,34 @@ class HomeScreen extends StatelessWidget {
             DrawerItem(
               title: 'Quit APP',
               icon: Icons.exit_to_app,
-              onTap: () => Navigator.pushNamed(context, '/home'),
+              onTap: () => Navigator.pushNamed(context, '/login'),
             ),
             spaceBox(h: 25),
           ],
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 500,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: const [
-                ProductCard(),
-                ProductCard(),
-                ProductCard(),
-              ],
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .9,
+              child: const SingleChildScrollView(
+                scrollDirection: Axis
+                    .vertical, // You can change this to Axis.horizontal if needed
+                child: Wrap(
+                  children: [
+                    ProductCard(),
+                    ProductCard(),
+                    ProductCard(),
+                    ProductCard(),
+                    ProductCard(),
+                    ProductCard(),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

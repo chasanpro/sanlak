@@ -29,7 +29,7 @@ class _CartScreenState extends State<CartScreen> {
             const Text('YOUR CART IS MISSING YOU'),
             spaceBox(h: 25),
             SizedBox(
-              height: 700,
+              height: MediaQuery.of(context).size.height * .7,
               child: ListView(
                 children: [
                   CartCard(
