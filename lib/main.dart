@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sanlak/Screens/checkout_screen.dart';
+import 'package:sanlak/Screens/productInfo_screen.dart';
 import 'package:sanlak/Screens/login_screen.dart';
 import 'package:sanlak/Screens/cart_screen.dart';
 import 'package:sanlak/Screens/intro_screen.dart';
@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
           '/cart': (context) => const CartScreen(),
           '/login': (context) => LoginScreen(),
           '/signup': (context) => SignupScreen(),
-          '/orders': (context) => const OrdersScreen(),
-          '/checkout': (context) => const UserAddressScreen(),
+          '/orders': (context) => OrdersScreen(),
+          '/productinfo': (context) => const ProductinfoScreen(),
         },
         home: const IntroScreen());
   }
