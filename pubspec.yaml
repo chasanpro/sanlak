@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^2.3.2
   provider: ^6.1.2
   http: ^1.2.2
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -78,7 +79,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-  #   - family: Schyler
+  #   - family: Poppins
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf

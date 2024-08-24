@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomeScreen(),
           '/cart': (context) => const CartScreen(),
           '/login': (context) => const LoginScreen(),
-          '/signup': (context) => SignupScreen(),
-          '/orders': (context) => OrdersScreen(),
+          '/signup': (context) => const SignupScreen(),
+          '/orders': (context) => const OrdersScreen(),
           '/productinfo': (context) => const ProductinfoScreen(),
         },
         home: const IntroScreen());

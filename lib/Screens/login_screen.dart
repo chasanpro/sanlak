@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sanlak/Components/reusableText.dart';
 import 'package:sanlak/Core/AppProvider.dart';
 // Import the provider class
 
@@ -38,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const MyText('LOGIN')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -97,11 +99,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text('Login'),
+                child: const MyText(
+                  'LOGIN',
+                  fontSize: 12,
+                ),
               ),
               const SizedBox(height: 20),
               Text(_message,
                   style: TextStyle(color: theme.colorScheme.onSurface)),
+              CupertinoButton(
+                  child: const MyText(
+                    'Create an Account',
+                    fontSize: 14,
+                  ),
+                  onPressed: () => Navigator.pushNamed(context, '/signup'))
             ],
           ),
         ),

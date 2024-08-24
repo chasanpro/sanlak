@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -21,9 +27,9 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _validFromController = TextEditingController();
   final TextEditingController _validThruController = TextEditingController();
 
-  String _paymentMode = 'Credit Card';
+  final String _paymentMode = 'Credit Card';
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final userData = {
         'email': _emailController.text,
@@ -43,8 +49,17 @@ class _SignupScreenState extends State<SignupScreen> {
         }
       };
 
-      // Perform API call with userData map
-      print(userData); // For debugging; replace with actual API call
+      final response = await http.post(
+        Uri.parse(
+            'https://ap-south-1.aws.data.mongodb-api.com/app/data-gxmmnfs/endpoint/registerUser'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(userData),
+      );
+
+      print(response.body);
+      if (response.statusCode == 200) {
+        Navigator.pushNamed(context, '/login');
+      } // Print the response body for debugging
     }
   }
 
@@ -52,7 +67,14 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up'),
+        title: Text(
+          'REGISTER ACCOUNT',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -63,7 +85,17 @@ class _SignupScreenState extends State<SignupScreen> {
               // Email
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -75,12 +107,23 @@ class _SignupScreenState extends State<SignupScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
 
               // Password
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 obscureText: true,
+                style: GoogleFonts.poppins(),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter password';
@@ -88,76 +131,227 @@ class _SignupScreenState extends State<SignupScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
 
               // Address Fields
               TextFormField(
                 controller: _streetController,
-                decoration: const InputDecoration(labelText: 'Street'),
+                decoration: InputDecoration(
+                  labelText: 'Street',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter street';
+                  }
+                  return null;
+                },
               ),
+              const SizedBox(height: 16),
+
               TextFormField(
                 controller: _cityController,
-                decoration: const InputDecoration(labelText: 'City'),
+                decoration: InputDecoration(
+                  labelText: 'City',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter city';
+                  }
+                  return null;
+                },
               ),
+              const SizedBox(height: 16),
+
               TextFormField(
                 controller: _stateController,
-                decoration: const InputDecoration(labelText: 'State'),
+                decoration: InputDecoration(
+                  labelText: 'State',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter state';
+                  }
+                  return null;
+                },
               ),
+              const SizedBox(height: 16),
+
               TextFormField(
                 controller: _zipCodeController,
-                decoration: const InputDecoration(labelText: 'Zip Code'),
+                decoration: InputDecoration(
+                  labelText: 'Zip Code',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 keyboardType: TextInputType.number,
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter zip code';
+                  }
+                  return null;
+                },
               ),
+              const SizedBox(height: 16),
+
               TextFormField(
                 controller: _countryController,
-                decoration: const InputDecoration(labelText: 'Country'),
+                decoration: InputDecoration(
+                  labelText: 'Country',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter country';
+                  }
+                  return null;
+                },
               ),
+              const SizedBox(height: 16),
 
               // Card Details Fields
               TextFormField(
                 controller: _cardHolderFullNameController,
-                decoration:
-                    const InputDecoration(labelText: 'Card Holder Full Name'),
-              ),
-              TextFormField(
-                controller: _cardNumberController,
-                decoration: const InputDecoration(labelText: 'Card Number'),
-                keyboardType: TextInputType.number,
-              ),
-              TextFormField(
-                controller: _validFromController,
-                decoration:
-                    const InputDecoration(labelText: 'Valid From (MM/YY)'),
-              ),
-              TextFormField(
-                controller: _validThruController,
-                decoration:
-                    const InputDecoration(labelText: 'Valid Thru (MM/YY)'),
-              ),
-
-              // Payment Mode Dropdown
-              DropdownButtonFormField<String>(
-                value: _paymentMode,
-                decoration: const InputDecoration(labelText: 'Payment Mode'),
-                items:
-                    ['Credit Card', 'Debit Card', 'PayPal', 'Cash on Delivery']
-                        .map((mode) => DropdownMenuItem(
-                              value: mode,
-                              child: Text(mode),
-                            ))
-                        .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _paymentMode = value!;
-                  });
+                decoration: InputDecoration(
+                  labelText: 'Card Holder Full Name',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter card holder name';
+                  }
+                  return null;
                 },
               ),
+              const SizedBox(height: 16),
 
-              // Sign Up Button
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Sign Up'),
+              TextFormField(
+                controller: _cardNumberController,
+                decoration: InputDecoration(
+                  labelText: 'Card Number',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter card number';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: _validFromController,
+                decoration: InputDecoration(
+                  labelText: 'Valid From (MM/YY)',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid from date';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: _validThruController,
+                decoration: InputDecoration(
+                  labelText: 'Valid Thru (MM/YY)',
+                  labelStyle: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                style: GoogleFonts.poppins(),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid thru date';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Signup Button
+              ElevatedButton(
+                onPressed: _submitForm,
+                style: ElevatedButton.styleFrom(
+                  //  primary: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'SIGN UP',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
