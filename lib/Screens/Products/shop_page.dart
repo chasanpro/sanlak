@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sanlak/Components/Product_card.dart';
+import 'package:sanlak/Components/drawer_item.dart';
+import 'package:sanlak/Components/reusables.dart';
 
 import 'package:sanlak/Screens/Products/shop_provider.dart';
 
@@ -157,7 +159,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double scrnWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      drawer: Drawer(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Column(
+          children: [
+            spaceBox(h: 190),
+            Icon(Icons.shopping_bag,
+                size: 90, color: Theme.of(context).colorScheme.inversePrimary),
+            spaceBox(h: 25),
+            DrawerItem(
+              title: 'Home',
+              icon: Icons.home,
+              onTap: () => Navigator.pushNamed(context, '/home'),
+            ),
+            spaceBox(h: 25),
+            DrawerItem(
+              title: 'cart',
+              icon: Icons.shopping_basket,
+              onTap: () => Navigator.pushNamed(context, '/cart'),
+            ),
+            spaceBox(h: 25),
+            DrawerItem(
+              title: 'Orders',
+              icon: Icons.list_alt_rounded,
+              onTap: () => Navigator.pushNamed(context, '/orders'),
+            ),
+            spaceBox(h: 25),
+            const Spacer(),
+            DrawerItem(
+              title: 'Quit APP',
+              icon: Icons.exit_to_app,
+              onTap: () => Navigator.pushNamed(context, '/'),
+            ),
+            spaceBox(h: 25),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showFilterDialog(context),
         backgroundColor: _isFilterActive ? Colors.red : Colors.grey,
@@ -189,17 +228,35 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             return SingleChildScrollView(
-              child: Wrap(
-                spacing: 10.0,
-                runSpacing: 10.0,
-                children: productProvider.products.map((product) {
-                  return ProductCard(
-                    onTap: () => Navigator.pushNamed(context, '/productinfo'),
-                    price: '\$${product.price.toString()}',
-                    name: product.name,
-                    imageUrl: product.imageUrl,
-                  );
-                }).toList(),
+              child: SizedBox(
+                width: scrnWidth,
+                child: Center(
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: 10.0,
+                    runSpacing: 8.0,
+                    children: productProvider.products.map((product) {
+                      return ProductCard(
+                        height: scrnWidth < 390 ? 300 : 260,
+                        width: scrnWidth < 390 ? 300 : 160,
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          '/productinfo',
+                          arguments: {
+                            'id': product.id,
+                            'name': product.name,
+                            'imageUrl': product.imageUrl ?? '',
+                            'description': product.description,
+                            'price': product.price,
+                          },
+                        ),
+                        price: '\$${product.price.toString()}',
+                        name: product.name,
+                        imageUrl: product.imageUrl,
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             );
           },

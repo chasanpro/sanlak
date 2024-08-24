@@ -27,11 +27,25 @@ class AppStateProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        final userId = responseData['user_id'];
 
-        // Save user_id in shared preferences
+        // Extract user details
+        final userId = responseData['user_id'];
+        final uid = responseData['uid'];
+        final email = responseData['email'];
+        final confirmed = responseData['confirmed'];
+        final createdAt = responseData['createdAt'];
+        final address = responseData['address'];
+        final cardDetails = responseData['cardDetails'];
+
+        // Save user details in shared preferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_id', userId);
+        await prefs.setString('uid', uid);
+        await prefs.setString('email', email);
+        await prefs.setBool('confirmed', confirmed);
+        await prefs.setString('createdAt', createdAt);
+        await prefs.setString('address', jsonEncode(address));
+        await prefs.setString('cardDetails', jsonEncode(cardDetails));
 
         return responseData['message']; // Return the success message
       } else {
@@ -41,4 +55,123 @@ class AppStateProvider with ChangeNotifier {
       return 'An error occurred: $error';
     }
   }
+
+  Future<void> addProduct(Product product) async {
+    final prefs = await SharedPreferences.getInstance();
+    final productsJson = prefs.getString('products') ?? '[]';
+    final List<dynamic> productsList = jsonDecode(productsJson);
+
+    productsList.add(product.toJson());
+
+    await prefs.setString('products', jsonEncode(productsList));
+    notifyListeners();
+  }
+
+  Future<void> deleteProduct(String productId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final productsJson = prefs.getString('products') ?? '[]';
+    final List<dynamic> productsList = jsonDecode(productsJson);
+
+    // Remove all products with the matching productId
+    final updatedList =
+        productsList.where((p) => p['product_id'] != productId).toList();
+
+    await prefs.setString('products', jsonEncode(updatedList));
+    notifyListeners();
+  }
+
+  Future<void> updateProduct(Product updatedProduct) async {
+    final prefs = await SharedPreferences.getInstance();
+    final productsJson = prefs.getString('products') ?? '[]';
+    final List<dynamic> productsList = jsonDecode(productsJson);
+
+    // Update the product with the matching productId
+    final updatedList = productsList.map((p) {
+      if (p['product_id'] == updatedProduct.productId) {
+        return updatedProduct.toJson();
+      }
+      return p;
+    }).toList();
+
+    await prefs.setString('products', jsonEncode(updatedList));
+    notifyListeners();
+  }
+
+  Future<List<Product>> fetchAllProducts() async {
+    final prefs = await SharedPreferences.getInstance();
+    final productsJson = prefs.getString('products') ?? '[]';
+    final List<dynamic> productsList = jsonDecode(productsJson);
+
+    return productsList.map((p) => Product.fromJson(p)).toList();
+  }
+
+  Future<void> clearAllData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_id');
+    await prefs.remove('uid');
+    await prefs.remove('email');
+    await prefs.remove('confirmed');
+    await prefs.remove('createdAt');
+    await prefs.remove('address');
+    await prefs.remove('cardDetails');
+  }
+}
+
+Future<Map<String, dynamic>> fetchUserData() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  // Fetch user details from shared preferences
+  final userId = prefs.getString('user_id') ?? '';
+  final uid = prefs.getString('uid') ?? '';
+  final email = prefs.getString('email') ?? '';
+  final confirmed = prefs.getBool('confirmed') ?? false;
+  final createdAt = prefs.getString('createdAt') ?? '';
+  final addressJson = prefs.getString('address') ?? '{}';
+  final cardDetailsJson = prefs.getString('cardDetails') ?? '{}';
+
+  // Decode JSON strings
+  final address = jsonDecode(addressJson);
+  final cardDetails = jsonDecode(cardDetailsJson);
+
+  return {
+    'user_id': userId,
+    'uid': uid,
+    'email': email,
+    'confirmed': confirmed,
+    'createdAt': createdAt,
+    'address': address,
+    'cardDetails': cardDetails,
+  };
+}
+
+class Product {
+  final String productId;
+  final String name;
+  final double price;
+  final int quantity;
+  final double totalPrice;
+
+  Product({
+    required this.productId,
+    required this.name,
+    required this.price,
+    required this.quantity,
+    required this.totalPrice,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'product_id': productId,
+        'name': name,
+        'price': price,
+        'quantity': quantity,
+        'total_price': totalPrice,
+      };
+
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+        productId: json['product_id'],
+        name: json['name'],
+        price: json['price'],
+        quantity: json['quantity'],
+        totalPrice: json['total_price'],
+      );
 }

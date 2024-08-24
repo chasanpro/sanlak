@@ -4,6 +4,7 @@ import 'package:sanlak/Components/reusables.dart';
 class ProductCard extends StatelessWidget {
   final void Function()? onTap;
   final String price, name, imageUrl;
+  final double height, width;
 
   const ProductCard({
     super.key,
@@ -11,6 +12,8 @@ class ProductCard extends StatelessWidget {
     required this.price,
     required this.name,
     required this.imageUrl,
+    required this.height,
+    required this.width,
   });
 
   @override
@@ -20,11 +23,11 @@ class ProductCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Container(
-          height: 260,
-          width: 170,
+          height: height,
+          width: width,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
             child: Column(
@@ -32,8 +35,8 @@ class ProductCard extends StatelessWidget {
                 spaceBox(h: 10),
                 // Display the product image with placeholder and error handling
                 Container(
-                  height: 190,
-                  width: 160,
+                  height: height * .7,
+                  width: width * .9,
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(15),
@@ -60,6 +63,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 spaceBox(h: 10),
                 Row(
                   children: [

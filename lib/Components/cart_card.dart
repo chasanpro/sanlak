@@ -6,13 +6,21 @@ class CartCard extends StatefulWidget {
   final String productPrice;
   final String? imageUrl;
   final VoidCallback onDelete;
+  final VoidCallback? onIncrease; // Add this
+  final VoidCallback? onDecrease; // Add this
+  final VoidCallback? onTap;
+  int quantity;
 
-  const CartCard({
+  CartCard({
     super.key,
     required this.productName,
     required this.productPrice,
     this.imageUrl,
     required this.onDelete,
+    this.onIncrease,
+    this.onDecrease,
+    this.onTap,
+    required this.quantity,
   });
 
   @override
@@ -20,29 +28,25 @@ class CartCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartCard> {
-  int _quantity = 1;
-
   void _increaseQuantity() {
-    setState(() {
-      _quantity++;
-    });
+    if (widget.onIncrease != null) {
+      widget.onIncrease!();
+    }
   }
 
   void _decreaseQuantity() {
-    if (_quantity > 1) {
-      setState(() {
-        _quantity--;
-      });
+    if (widget.onDecrease != null) {
+      widget.onDecrease!();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         height: 100,
-        width: 400,
+        width: double.infinity, // Use double.infinity for full width
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(10),
@@ -79,56 +83,69 @@ class _CartCardState extends State<CartCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    widget.productName,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        widget.productName,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                          onPressed: widget.onDelete,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
                   Row(
                     children: [
+                      SizedBox(
+                        width: 60,
+                        child: Text(
+                          '\$${widget.productPrice}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
                       Text(
-                        '\$${widget.productPrice}',
+                        'Quantity : ',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
-                      Row(
-                        children: [
-                          spaceBox(w: 30),
-                          Text(
-                            'Quantity : ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                          // Decrease Quantity Button
-                          IconButton(
-                            icon: const Icon(Icons.remove),
-                            onPressed: _decreaseQuantity,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                          Text(
-                            '$_quantity',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                          // Increase Quantity Button
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: _increaseQuantity,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        ],
+                      // Decrease Quantity Button
+                      IconButton(
+                        icon: const Icon(Icons.remove),
+                        onPressed: _decreaseQuantity,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      Text(
+                        '${widget.quantity}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                      // Increase Quantity Button
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: _increaseQuantity,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     ],
                   ),
@@ -138,13 +155,6 @@ class _CartCardState extends State<CartCard> {
             ),
 
             // Delete Icon
-            IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              onPressed: widget.onDelete,
-            ),
           ],
         ),
       ),
