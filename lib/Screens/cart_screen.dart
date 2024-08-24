@@ -2,6 +2,7 @@ import 'dart:convert'; // Import for JSON encoding/decoding
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sanlak/Core/AppProvider.dart';
+import 'package:sanlak/Core/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sanlak/Components/cart_card.dart';
 import 'package:sanlak/Components/reusables.dart';
@@ -225,7 +226,13 @@ void _showCustomBottomSheet(BuildContext context, String total) {
               ),
               spaceBox(h: 15),
               CupertinoButton(
-                onPressed: () {},
+                onPressed: () async {
+                  // sendRequest();sendOrderRequest
+                  final int statusCode = await sendOrderRequest();
+                  if (statusCode == 200) {
+                    Navigator.pushNamed(context, '/orders');
+                  } else {}
+                },
                 color: Colors.black,
                 child: const Text(
                   'TAP TO PAY',

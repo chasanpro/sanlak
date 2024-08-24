@@ -1,18 +1,20 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
+import 'package:sanlak/Core/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppStateProvider with ChangeNotifier {
+  final headers = {
+    'Accept': 'application/json',
+    'Authorization':
+        'Bearer ogpJ6ec2nZvO0aNqVmteizayDEECWoSA8KX1fq2HrhIM7falKm7zqa4im4lvFuVG', // Replace with your API key
+    'Content-Type': 'application/json',
+  };
   Future<String> login(String email, String password) async {
     const url =
         'https://ap-south-1.aws.data.mongodb-api.com/app/data-gxmmnfs/endpoint/login';
-    final headers = {
-      'Accept': 'application/json',
-      'Authorization':
-          'Bearer ogpJ6ec2nZvO0aNqVmteizayDEECWoSA8KX1fq2HrhIM7falKm7zqa4im4lvFuVG', // Replace with your API key
-      'Content-Type': 'application/json',
-    };
+
     final body = jsonEncode({
       'email': email,
       'password': password,
@@ -26,20 +28,21 @@ class AppStateProvider with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
+        print(response.body);
         final responseData = jsonDecode(response.body);
 
         // Extract user details
-        final userId = responseData['user_id'];
-        final uid = responseData['uid'];
-        final email = responseData['email'];
-        final confirmed = responseData['confirmed'];
-        final createdAt = responseData['createdAt'];
-        final address = responseData['address'];
-        final cardDetails = responseData['cardDetails'];
+        // final userId = responseData['user_id'];
+        final uid = responseData['user']['uid'];
 
-        // Save user details in shared preferences
+        final email = responseData['user']['email'];
+        final confirmed = responseData['user']['confirmed'];
+        final createdAt = responseData['user']['createdAt'];
+        final address = responseData['user']['address'];
+        final cardDetails = responseData['user']['cardDetails'];
+
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_id', userId);
+        //await prefs.setString('user_id', userId);
         await prefs.setString('uid', uid);
         await prefs.setString('email', email);
         await prefs.setBool('confirmed', confirmed);
