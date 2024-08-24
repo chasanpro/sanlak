@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sanlak/Components/Product_card.dart';
-import 'package:sanlak/Components/drawer_item.dart';
-import 'package:sanlak/Components/reusables.dart';
+
 import 'package:sanlak/Screens/Products/shop_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,8 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String _selectedPriceOrder = 'Low to High';
-
-  final Map<String, bool> _selectedCategories = {
+  Map<String, bool> _selectedCategories = {
     'Books': false,
     'Sports': false,
     'Fashion': false,
@@ -101,7 +99,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 CupertinoButton(
                   color: Colors.black,
                   onPressed: () {
-                    // Apply the filters (e.g., update the product list)
+                    // Reset filters
+                    setState(() {
+                      _selectedPriceOrder = 'Low to High';
+                      _selectedCategories = {
+                        'Books': false,
+                        'Sports': false,
+                        'Fashion': false,
+                        'Electronics': false,
+                        'Home Appliances': false,
+                      };
+                    });
+                    Provider.of<ProductProvider>(context, listen: false)
+                        .resetFilters();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Reset Filters',
+                      style: TextStyle(color: Colors.white)),
+                ),
+                CupertinoButton(
+                  color: Colors.black,
+                  onPressed: () {
+                    // Apply filters
+                    Provider.of<ProductProvider>(context, listen: false)
+                        .applyFilters(
+                      priceOrder: _selectedPriceOrder,
+                      categories: _selectedCategories,
+                    );
                     Navigator.of(context).pop();
                   },
                   child: const Text('Apply Filters',
@@ -158,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => Navigator.pushNamed(context, '/productinfo'),
                     price: '\$${product.price.toString()}',
                     name: product.name,
-                    imageUrl: product.imageUrl,
+                    imageUrl: product.imageUrl, // Use actual imageUrl
                   );
                 }).toList(),
               ),

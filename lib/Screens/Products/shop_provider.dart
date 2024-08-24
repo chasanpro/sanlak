@@ -38,18 +38,20 @@ class Product {
 // Define the ProductProvider class
 class ProductProvider extends ChangeNotifier {
   List<Product> _products = [];
+  List<Product> _filteredProducts = [];
 
-  List<Product> get products => _products;
+  List<Product> get products => _filteredProducts;
+
+  final headers = {
+    'Accept': 'application/json',
+    'Authorization': 'Bearer abcd', // Replace with your API key
+    'Content-Type': 'application/json',
+  };
 
   Future<void> fetchAndSetProducts() async {
     const url =
         'https://ap-south-1.aws.data.mongodb-api.com/app/data-gxmmnfs/endpoint/getProductDetails';
-    final headers = {
-      'Accept': 'application/json',
-      'Authorization':
-          'Bearer ogpJ6ec2nZvO0aNqVmteizayDEECWoSA8KX1fq2HrhIM7falKm7zqa4im4lvFuVG', // Replace with your API key
-      'Content-Type': 'application/json',
-    };
+
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -59,14 +61,45 @@ class ProductProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final List<dynamic> productData = json.decode(response.body);
         _products = productData.map((item) => Product.fromJson(item)).toList();
+        _filteredProducts = List.from(_products);
         notifyListeners();
       } else {
         // Handle the error case
-        print('Failed to load products: ${response.body}');
+        print('Failed to load products: ${response.statusCode}');
       }
     } catch (error) {
       print('Error fetching products: $error');
-      // Handle the exception
     }
+  }
+
+  void applyFilters({
+    required String priceOrder,
+    required Map<String, bool> categories,
+  }) {
+    List<Product> filtered = List.from(_products);
+
+    // Filter by categories
+    if (categories.isNotEmpty) {
+      filtered = filtered
+          .where((product) => categories[product.category] == true)
+          .toList();
+    }
+
+    // Sort by price
+    filtered.sort((a, b) {
+      if (priceOrder == 'Low to High') {
+        return a.price.compareTo(b.price);
+      } else {
+        return b.price.compareTo(a.price);
+      }
+    });
+
+    _filteredProducts = filtered;
+    notifyListeners();
+  }
+
+  void resetFilters() {
+    _filteredProducts = List.from(_products);
+    notifyListeners();
   }
 }
