@@ -12,8 +12,7 @@ class OrdersScreen extends StatelessWidget {
     uid = prefs.getString('uid') ?? '';
     final headers = {
       'Accept': 'application/json',
-      'Authorization':
-          'Bearer ogpJ6ec2nZvO0aNqVmteizayDEECWoSA8KX1fq2HrhIM7falKm7zqa4im4lvFuVG', // Replace with your API key
+      'Authorization': 'Bearer apiKey', // Replace with your API key
       'Content-Type': 'application/json',
     };
     String url =
@@ -40,7 +39,13 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Orders')),
+      appBar: AppBar(
+        title: const Text('Orders'),
+        leading: GestureDetector(
+          child: const Icon(Icons.home),
+          onTap: () => Navigator.pushNamed(context, '/home'),
+        ),
+      ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchOrders(),
         builder: (context, snapshot) {

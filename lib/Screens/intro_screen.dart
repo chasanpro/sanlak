@@ -2,8 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:sanlak/Components/myButton.dart';
 import 'package:sanlak/Components/reusables.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
+
+  Future<bool> checkLogin() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String uid = prefs.getString('uid') ?? '';
+      return uid.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  void _handleButtonPress(BuildContext context) async {
+    bool isLoggedIn = await checkLogin();
+    if (isLoggedIn) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +48,21 @@ class IntroScreen extends StatelessWidget {
             ),
             spaceBox(h: 80),
             MyButton(
-                onTap: () => Navigator.pushNamed(context, '/login'),
-                child: Container(
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Theme.of(context).colorScheme.primary),
-                  child: Icon(Icons.arrow_forward,
-                      size: 40,
-                      color: Theme.of(context).colorScheme.inversePrimary),
-                ))
+              onTap: () => _handleButtonPress(context),
+              child: Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                child: Icon(
+                  Icons.arrow_forward,
+                  size: 40,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+            ),
           ],
         ),
       ),

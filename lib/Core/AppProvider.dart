@@ -7,8 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppStateProvider with ChangeNotifier {
   final headers = {
     'Accept': 'application/json',
-    'Authorization':
-        'Bearer ogpJ6ec2nZvO0aNqVmteizayDEECWoSA8KX1fq2HrhIM7falKm7zqa4im4lvFuVG', // Replace with your API key
+    'Authorization': 'Bearer apiKey', // Replace with your API key
     'Content-Type': 'application/json',
   };
   Future<String> login(String email, String password) async {

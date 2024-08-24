@@ -139,7 +139,7 @@ class _CartScreenState extends State<CartScreen> {
           child: Column(
             children: [
               spaceBox(h: 25),
-              const Text('YOUR CART IS MISSING YOU'),
+              const Center(child: Text('ADD ITEMS TO YOUR CART')),
               spaceBox(h: 25),
               Column(
                 children: _productsList.map((product) {
@@ -158,34 +158,35 @@ class _CartScreenState extends State<CartScreen> {
                 }).toList(),
               ),
               spaceBox(h: 25),
-              CupertinoButton(
-                color: Colors.blue,
-                child: const Text(
-                  'Proceed to Buy',
-                  style: TextStyle(color: Colors.white),
+              if (_productsList.isNotEmpty)
+                CupertinoButton(
+                  color: Colors.black,
+                  child: const Text(
+                    'Proceed to Buy',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    final cartItems = _productsList.map((product) {
+                      return Product(
+                        productId: product['productId'] ?? '',
+                        name: product['name'] ?? '',
+                        price: product['price']?.toDouble() ?? 0.0,
+                        quantity: product['quantity'] ?? 1,
+                        totalPrice: product['total_price']?.toDouble() ?? 0.0,
+                      );
+                    }).toList();
+
+                    // Calculate the total value
+                    final totalCartValue = calculateTotalCartValue(cartItems);
+
+                    // Print the total value
+                    print(
+                        'Total Cart Value: \$${totalCartValue.toStringAsFixed(2)}');
+                    _showCustomBottomSheet(
+                        context, totalCartValue.toStringAsFixed(2));
+                    // Handle proceed to buy action
+                  },
                 ),
-                onPressed: () {
-                  final cartItems = _productsList.map((product) {
-                    return Product(
-                      productId: product['productId'] ?? '',
-                      name: product['name'] ?? '',
-                      price: product['price']?.toDouble() ?? 0.0,
-                      quantity: product['quantity'] ?? 1,
-                      totalPrice: product['total_price']?.toDouble() ?? 0.0,
-                    );
-                  }).toList();
-
-                  // Calculate the total value
-                  final totalCartValue = calculateTotalCartValue(cartItems);
-
-                  // Print the total value
-                  print(
-                      'Total Cart Value: \$${totalCartValue.toStringAsFixed(2)}');
-                  _showCustomBottomSheet(
-                      context, totalCartValue.toStringAsFixed(2));
-                  // Handle proceed to buy action
-                },
-              ),
             ],
           ),
         ),
@@ -230,6 +231,8 @@ void _showCustomBottomSheet(BuildContext context, String total) {
                   // sendRequest();sendOrderRequest
                   final int statusCode = await sendOrderRequest();
                   if (statusCode == 200) {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('productsList', jsonEncode([]));
                     Navigator.pushNamed(context, '/orders');
                   } else {}
                 },

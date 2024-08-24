@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sanlak/Components/Product_card.dart';
 import 'package:sanlak/Components/drawer_item.dart';
 import 'package:sanlak/Components/reusables.dart';
+import 'package:sanlak/Core/AppProvider.dart';
 
 import 'package:sanlak/Screens/Products/shop_provider.dart';
 
@@ -189,10 +190,14 @@ class _HomeScreenState extends State<HomeScreen> {
             spaceBox(h: 25),
             const Spacer(),
             DrawerItem(
-              title: 'Quit APP',
-              icon: Icons.exit_to_app,
-              onTap: () => Navigator.pushNamed(context, '/'),
-            ),
+                title: 'Quit APP',
+                icon: Icons.exit_to_app,
+                onTap: () async {
+                  final productProvider =
+                      Provider.of<AppStateProvider>(context, listen: false);
+                  await productProvider.clearAllData();
+                  Navigator.pushNamed(context, '/');
+                }),
             spaceBox(h: 25),
           ],
         ),
