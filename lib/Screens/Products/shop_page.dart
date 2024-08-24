@@ -11,6 +11,13 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+// @override
+// void initState() {
+//   super.initState();
+//   // Fetch products when the screen is initialized
+//   final productProvider = Provider.of<ProductProvider>(context, listen: false);
+//   productProvider.fetchAndSetProducts();
+// }
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -30,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Electronics': false,
     'Home Appliances': false,
   };
+  bool _isFilterActive = false; // Track if filters are applied
 
   void _showFilterDialog(BuildContext context) {
     showDialog(
@@ -99,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 CupertinoButton(
                   color: Colors.black,
                   onPressed: () {
-                    // Reset filters
                     setState(() {
                       _selectedPriceOrder = 'Low to High';
                       _selectedCategories = {
@@ -109,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         'Electronics': false,
                         'Home Appliances': false,
                       };
+                      _isFilterActive = false; // No filter applied
                     });
                     Provider.of<ProductProvider>(context, listen: false)
                         .resetFilters();
@@ -120,12 +128,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 CupertinoButton(
                   color: Colors.black,
                   onPressed: () {
-                    // Apply filters
                     Provider.of<ProductProvider>(context, listen: false)
                         .applyFilters(
                       priceOrder: _selectedPriceOrder,
                       categories: _selectedCategories,
                     );
+                    setState(() {
+                      _isFilterActive = true; // Filter applied
+                    });
                     Navigator.of(context).pop();
                   },
                   child: const Text('Apply Filters',
@@ -150,6 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showFilterDialog(context),
+        backgroundColor: _isFilterActive ? Colors.red : Colors.grey,
+        child: const Icon(
+          Icons.filter_list,
+          color: Colors.white,
+        ),
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -170,19 +185,19 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Consumer<ProductProvider>(
           builder: (context, productProvider, child) {
             if (productProvider.products.isEmpty) {
-              return const CircularProgressIndicator(); // Show a loading indicator while fetching products
+              return const CircularProgressIndicator();
             }
 
             return SingleChildScrollView(
               child: Wrap(
-                spacing: 10.0, // Space between products horizontally
-                runSpacing: 10.0, // Space between products vertically
+                spacing: 10.0,
+                runSpacing: 10.0,
                 children: productProvider.products.map((product) {
                   return ProductCard(
                     onTap: () => Navigator.pushNamed(context, '/productinfo'),
                     price: '\$${product.price.toString()}',
                     name: product.name,
-                    imageUrl: product.imageUrl, // Use actual imageUrl
+                    imageUrl: product.imageUrl,
                   );
                 }).toList(),
               ),

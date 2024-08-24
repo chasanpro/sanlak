@@ -40,7 +40,8 @@ class ProductProvider extends ChangeNotifier {
   List<Product> _products = [];
   List<Product> _filteredProducts = [];
 
-  List<Product> get products => _filteredProducts;
+  List<Product> get products =>
+      _filteredProducts; // Use filtered products for display
 
   final headers = {
     'Accept': 'application/json',
@@ -61,10 +62,10 @@ class ProductProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final List<dynamic> productData = json.decode(response.body);
         _products = productData.map((item) => Product.fromJson(item)).toList();
-        _filteredProducts = List.from(_products);
+        _filteredProducts =
+            List.from(_products); // Initialize filtered products
         notifyListeners();
       } else {
-        // Handle the error case
         print('Failed to load products: ${response.statusCode}');
       }
     } catch (error) {
@@ -72,25 +73,25 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  void applyFilters({
-    required String priceOrder,
-    required Map<String, bool> categories,
-  }) {
+  void applyFilters(
+      {required String priceOrder, required Map<String, bool> categories}) {
     List<Product> filtered = List.from(_products);
 
-    // Filter by categories
-    if (categories.isNotEmpty) {
+    // Apply category filtering if at least one category is selected
+    if (categories.values.contains(true)) {
       filtered = filtered
-          .where((product) => categories[product.category] == true)
+          .where((product) => categories[product.category] ?? false)
           .toList();
     }
 
-    // Sort by price
+    // Apply price sorting
     filtered.sort((a, b) {
       if (priceOrder == 'Low to High') {
         return a.price.compareTo(b.price);
-      } else {
+      } else if (priceOrder == 'High to Low') {
         return b.price.compareTo(a.price);
+      } else {
+        return 0;
       }
     });
 
