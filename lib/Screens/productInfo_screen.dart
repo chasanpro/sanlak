@@ -1,6 +1,7 @@
 import 'dart:convert'; // Import for JSON encoding/decoding
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sanlak/Components/reusableText.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sanlak/Components/reusables.dart';
 
@@ -53,7 +54,7 @@ class ProductinfoScreen extends StatelessWidget {
     final String id = args?['id'] ?? 'No ID';
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      backgroundColor: Colors.grey[200],
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -64,7 +65,7 @@ class ProductinfoScreen extends StatelessWidget {
                 height: 400,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color.fromARGB(255, 186, 215, 229),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ClipRRect(
@@ -74,9 +75,8 @@ class ProductinfoScreen extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return const Center(
-                        child: Text(
+                        child: MyText(
                           'Image not available',
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
                         ),
                       );
                     },
@@ -86,7 +86,7 @@ class ProductinfoScreen extends StatelessWidget {
               spaceBox(h: 20),
               Row(
                 children: [
-                  spaceBox(w: 10),
+                  spaceBox(w: MediaQuery.of(context).size.width / 30),
                   Text(
                     name,
                     style: TextStyle(
@@ -106,33 +106,65 @@ class ProductinfoScreen extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const Text(
-                    'Price: ',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  spaceBox(w: MediaQuery.of(context).size.width / 30),
+                  const MyText(
+                    'Price: ', fontSize: 18,
+                    //  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Text(
+                  MyText(
                     '\$${price.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 7, 151, 12),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    color: const Color.fromARGB(255, 7, 151, 12),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                   const Spacer(),
                 ],
               ),
               const Spacer(),
-              CupertinoButton(
-                color: Colors.blue,
-                child: const Text(
-                  'ADD TO CART',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  _addToCart(context, id, name, imageUrl, description, price);
-                  const SnackBar(content: Text('Added to Cart'));
-                  // Navigator.pushNamed(context, '/cart');
-                },
+              Row(
+                children: [
+                  SizedBox(
+                    width: 60,
+                    child: MaterialButton(
+                      height: 50,
+                      color: Colors.white,
+                      child: const Center(child: Icon(Icons.home)),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/home');
+                        // Navigator.pushNamed(context, '/cart');
+                      },
+                    ),
+                  ),
+                  spaceBox(w: MediaQuery.of(context).size.width / 30),
+                  SizedBox(
+                    width: 250,
+                    child: CupertinoButton(
+                      color: Colors.black,
+                      child: const MyText(
+                        'ADD TO CART',
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        _addToCart(
+                            context, id, name, imageUrl, description, price);
+                        const SnackBar(content: Text('Added to Cart'));
+                        // Navigator.pushNamed(context, '/cart');
+                      },
+                    ),
+                  ),
+                  // SizedBox(
+                  //   width: 80,
+                  //   child: MaterialButton(
+                  //     height: 50,
+                  //     color: Colors.white,
+                  //     child: const Center(child: Icon(Icons.category_rounded)),
+                  //     onPressed: () {
+                  //       Navigator.pushNamed(context, '/cart');
+                  //       // Navigator.pushNamed(context, '/cart');
+                  //     },
+                  //   ),
+                  // ),
+                ],
               ),
             ],
           ),

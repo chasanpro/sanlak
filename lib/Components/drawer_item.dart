@@ -13,8 +13,14 @@ class DrawerItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 45),
       child: ListTile(
-        leading: Icon(icon),
-        title: MyText(title),
+        leading: Icon(
+          icon,
+          color: Colors.black,
+        ),
+        title: MyText(
+          title,
+          color: Colors.black,
+        ),
         onTap: onTap,
       ),
     );

@@ -1,15 +1,31 @@
 import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sanlak/Components/reusableText.dart';
+import 'package:sanlak/Components/reusables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
 
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  bool isLoggedIN = false;
   Future<List<Map<String, dynamic>>> fetchOrders() async {
     final prefs = await SharedPreferences.getInstance();
-    String uid = '1521aee7dbe5494899316b2da0d0c598';
+    String uid = '';
+
     uid = prefs.getString('uid') ?? '';
+    if (uid.isNotEmpty) {
+      setState(() {
+        isLoggedIN = true;
+      });
+    }
     final headers = {
       'Accept': 'application/json',
       'Authorization': 'Bearer apiKey', // Replace with your API key
@@ -26,13 +42,14 @@ class OrdersScreen extends StatelessWidget {
         final List<dynamic> ordersJson = data['orders'] ?? [];
         return ordersJson
             .map((order) => Map<String, dynamic>.from(order))
+            .toList()
+            .reversed
             .toList();
       } else {
-        throw Exception('Failed to load orders');
+        return [];
       }
     } catch (e) {
-      print(e);
-      throw Exception('Failed to load orders');
+      return [];
     }
   }
 
@@ -40,9 +57,12 @@ class OrdersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orders'),
+        title: const MyText('Orders'),
         leading: GestureDetector(
-          child: const Icon(Icons.home),
+          child: const Icon(
+            Icons.home,
+            color: Colors.black,
+          ),
           onTap: () => Navigator.pushNamed(context, '/home'),
         ),
       ),
@@ -54,7 +74,25 @@ class OrdersScreen extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No orders available'));
+            return Center(
+                child: Column(
+              children: [
+                spaceBox(h: MediaQuery.of(context).size.height / 3),
+                CupertinoButton(
+                  color: Colors.black,
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  child: const MyText(
+                    'LOGIN NOW',
+                    fontSize: 12,
+                    color: Colors.white,
+                  ),
+                ),
+                spaceBox(h: 15),
+                const Text('No orders found, Try Logging in '),
+              ],
+            ));
           } else {
             final orders = snapshot.data!;
 

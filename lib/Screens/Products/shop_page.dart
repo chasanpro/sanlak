@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sanlak/Components/Product_card.dart';
 import 'package:sanlak/Components/drawer_item.dart';
@@ -194,9 +195,12 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.grey[200],
         child: Column(
           children: [
-            spaceBox(h: 190),
-            Icon(Icons.shopping_bag,
-                size: 90, color: Theme.of(context).colorScheme.inversePrimary),
+            spaceBox(h: 150),
+            SizedBox(
+                height: 180,
+                child: LottieBuilder.asset(
+                  'assets/lottie_animations/cartDrawer.json',
+                )),
             spaceBox(h: 25),
             DrawerItem(
               title: 'Home',
@@ -248,7 +252,10 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () => Navigator.pushNamed(context, '/cart'),
             child: const Padding(
               padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.shopping_cart),
+              child: Icon(
+                Icons.shopping_cart,
+                color: Colors.black,
+              ),
             ),
           )
         ],

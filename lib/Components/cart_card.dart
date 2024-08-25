@@ -48,7 +48,7 @@ class _CartCardState extends State<CartCard> {
         height: 100,
         width: double.infinity, // Use double.infinity for full width
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(

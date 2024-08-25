@@ -1,6 +1,8 @@
 import 'dart:convert'; // Import for JSON encoding/decoding
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:sanlak/Components/reusableText.dart';
 import 'package:sanlak/Core/AppProvider.dart';
 import 'package:sanlak/Core/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -121,6 +123,7 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
+  bool paymentDOne = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,7 +142,7 @@ class _CartScreenState extends State<CartScreen> {
           child: Column(
             children: [
               spaceBox(h: 25),
-              const Center(child: Text('ADD ITEMS TO YOUR CART')),
+              const Center(child: MyText('YOUR CART SUMMARY')),
               spaceBox(h: 25),
               Column(
                 children: _productsList.map((product) {
@@ -161,10 +164,9 @@ class _CartScreenState extends State<CartScreen> {
               if (_productsList.isNotEmpty)
                 CupertinoButton(
                   color: Colors.black,
-                  child: const Text(
-                    'Proceed to Buy',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: const MyText('Proceed to Buy', color: Colors.white
+                      //   style: TextStyle(color: Colors.white),
+                      ),
                   onPressed: () {
                     final cartItems = _productsList.map((product) {
                       return Product(
@@ -206,7 +208,7 @@ void _showCustomBottomSheet(BuildContext context, String total) {
     backgroundColor: Colors.transparent, // Make the background transparent
     builder: (context) {
       return Container(
-        height: 260, width: double.infinity,
+        height: 280, width: double.infinity,
         margin:
             const EdgeInsets.all(15.0), // Add margin to float above the bottom
         decoration: BoxDecoration(
@@ -218,12 +220,10 @@ void _showCustomBottomSheet(BuildContext context, String total) {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
+              MyText(
                 '\$ $total',
-                style: const TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                ),
+                fontSize: 60,
+                fontWeight: FontWeight.bold,
               ),
               spaceBox(h: 15),
               CupertinoButton(
@@ -233,26 +233,65 @@ void _showCustomBottomSheet(BuildContext context, String total) {
                   if (statusCode == 200) {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.setString('productsList', jsonEncode([]));
-                    Navigator.pushNamed(context, '/orders');
+                    //  Navigator.pushNamed(context, '/orders');
+                    _orderSuccess(context, '');
                   } else {}
                 },
                 color: Colors.black,
-                child: const Text(
-                  'TAP TO PAY',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const MyText('TAP TO PAY', color: Colors.white
+                    // style: TextStyle(),
+                    ),
               ),
               spaceBox(h: 15),
               CupertinoButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
+                child: const MyText(
                   'CANCEL',
-                  style: TextStyle(color: Colors.black),
+                  fontSize: 14,
                 ),
               ),
             ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void _orderSuccess(BuildContext context, String total) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent, // Make the background transparent
+    builder: (context) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, '/orders');
+        },
+        child: Container(
+          height: 280, width: double.infinity,
+          margin: const EdgeInsets.all(
+              15.0), // Add margin to float above the bottom
+          decoration: BoxDecoration(
+            color: Colors.white, // Set your desired color
+            borderRadius: BorderRadius.circular(15), // Border radius
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(
+                    height: 180,
+                    child: LottieBuilder.asset(
+                      'assets/lottie_animations/cart.json',
+                    )),
+                spaceBox(h: 15),
+                const MyText('Proceed to Order Page')
+              ],
+            ),
           ),
         ),
       );

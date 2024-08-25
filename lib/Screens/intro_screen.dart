@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sanlak/Components/myButton.dart';
 import 'package:sanlak/Components/reusables.dart';
 
@@ -29,13 +30,17 @@ class IntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             spaceBox(h: 120),
-            Icon(Icons.shopping_bag,
-                size: 90, color: Theme.of(context).colorScheme.inversePrimary),
+            SizedBox(
+                height: 180,
+                child: LottieBuilder.asset(
+                  'assets/lottie_animations/cart1.json',
+                )),
             spaceBox(h: 20),
             const Text(
               'SANLAK INTERVIEW TASK',
@@ -56,10 +61,10 @@ class IntroScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_forward,
                   size: 40,
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Colors.white,
                 ),
               ),
             ),
