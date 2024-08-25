@@ -7,3 +7,5 @@ Here's a summary of your project details:-
     - **Developed from Scratch**: Built the entire application from the ground up, ensuring a custom and tailored solution.
 
   **State Management**: Utilized the `Provider` package for managing application state efficiently.This summary encapsulates the key elements of your project, highlighting the technologies, security measures, and development process used.
+
+  ---Chaitanya Damarasingu
