@@ -128,9 +128,12 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CART'),
+        title: const MyText('CART'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.black,
+          ),
           onPressed: () {
             Navigator.pushNamed(context, '/home');
           },
@@ -235,7 +238,20 @@ void _showCustomBottomSheet(BuildContext context, String total) {
                     await prefs.setString('productsList', jsonEncode([]));
                     //  Navigator.pushNamed(context, '/orders');
                     _orderSuccess(context, '');
-                  } else {}
+                  } else {
+                    final snackBar = SnackBar(
+                      content:
+                          const Text('Kindly Login Before placing an order'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () {
+                          // Some action to undo something.
+                        },
+                      ),
+                    );
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
                 color: Colors.black,
                 child: const MyText('TAP TO PAY', color: Colors.white

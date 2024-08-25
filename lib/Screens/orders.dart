@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sanlak/Components/reusableText.dart';
 import 'package:sanlak/Components/reusables.dart';
+import 'package:sanlak/Core/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -16,19 +16,22 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   bool isLoggedIN = false;
+
   Future<List<Map<String, dynamic>>> fetchOrders() async {
     final prefs = await SharedPreferences.getInstance();
-    String uid = '';
+    String uid = prefs.getString('uid') ?? '';
 
-    uid = prefs.getString('uid') ?? '';
     if (uid.isNotEmpty) {
       setState(() {
         isLoggedIN = true;
       });
+    } else {
+      return [];
     }
+
     final headers = {
       'Accept': 'application/json',
-      'Authorization': 'Bearer apiKey', // Replace with your API key
+      'Authorization': 'Bearer $apiKey', // Replace with your API key
       'Content-Type': 'application/json',
     };
     String url =
@@ -37,6 +40,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     try {
       final response = await http.get(Uri.parse(url), headers: headers);
       print(response.body);
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> ordersJson = data['orders'] ?? [];
@@ -49,6 +53,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         return [];
       }
     } catch (e) {
+      print('Error fetching orders: $e');
       return [];
     }
   }
@@ -73,26 +78,29 @@ class _OrdersScreenState extends State<OrdersScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (!isLoggedIN ||
+              !snapshot.hasData ||
+              snapshot.data!.isEmpty) {
             return Center(
-                child: Column(
-              children: [
-                spaceBox(h: MediaQuery.of(context).size.height / 3),
-                CupertinoButton(
-                  color: Colors.black,
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  child: const MyText(
-                    'LOGIN NOW',
-                    fontSize: 12,
-                    color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CupertinoButton(
+                    color: Colors.black,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: const MyText(
+                      'LOGIN NOW',
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                spaceBox(h: 15),
-                const Text('No orders found, Try Logging in '),
-              ],
-            ));
+                  const SizedBox(height: 15),
+                  const Text('No orders found, Try Logging in'),
+                ],
+              ),
+            );
           } else {
             final orders = snapshot.data!;
 
