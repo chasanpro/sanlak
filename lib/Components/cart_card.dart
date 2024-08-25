@@ -45,7 +45,7 @@ class _CartCardState extends State<CartCard> {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
-        height: 100,
+        height: 115,
         width: double.infinity, // Use double.infinity for full width
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,

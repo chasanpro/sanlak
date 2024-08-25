@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     SizedBox(
-                      width: 140,
+                      width: 120,
                       child: CupertinoButton(
                         // color: Colors.black,
                         onPressed: () {
@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: 140,
+                      width: 120,
                       child: CupertinoButton(
                         //  color: Colors.wh,
                         onPressed: () => Navigator.of(context).pop(),
