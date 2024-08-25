@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Form(
           key: _formKey,
           child: Container(
-            height: 460,
+            height: 490,
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -127,7 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Create an Account',
                       fontSize: 14,
                     ),
-                    onPressed: () => Navigator.pushNamed(context, '/signup'))
+                    onPressed: () => Navigator.pushNamed(context, '/signup')),
+                spaceBox(h: 20),
               ],
             ),
           ),
