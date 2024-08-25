@@ -1,16 +1,9 @@
-# sanlak
+Here's a summary of your project details:- 
+**Technology Stack**:
+  - **Flutter**: Used for developing the application across platforms (web, Android, iOS).
+  - **MongoDB in Cloud**: Leveraged as the database for storing and managing data. 
+  - **MongoDB Data API**: Used for interacting with the database via API endpoints.
+  - **Security**:  - **API Key Authentication**: Secured the MongoDB Data API using an API key to protect data access.  - **CORS Enabled**: Configured Cross-Origin Resource Sharing (CORS) to allow secure access from the Flutter web application.- **Development Approach**:  
+    - **Developed from Scratch**: Built the entire application from the ground up, ensuring a custom and tailored solution.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  **State Management**: Utilized the `Provider` package for managing application state efficiently.This summary encapsulates the key elements of your project, highlighting the technologies, security measures, and development process used.
