@@ -149,6 +149,7 @@ class _CartScreenState extends State<CartScreen> {
               spaceBox(h: 25),
               Column(
                 children: _productsList.map((product) {
+                  print(product['imageUrl']);
                   int index = _productsList.indexOf(product);
                   return CartCard(
                     onTap: () => _showDeleteConfirmationDialog(index),

@@ -285,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           arguments: {
                             'id': product.id,
                             'name': product.name,
-                            'imageUrl': product.imageUrl ?? '',
+                            'imageUrl': product.imageUrl,
                             'description': product.description,
                             'price': product.price,
                           },

@@ -25,6 +25,7 @@ class ProductinfoScreen extends StatelessWidget {
 
     // Add the new product to the list
     final newProduct = {
+      'imageUrl': imageUrl,
       'product_id': id,
       'name': name,
       'price': price,
@@ -33,7 +34,7 @@ class ProductinfoScreen extends StatelessWidget {
     };
 
     productsList.add(newProduct);
-    print(newProduct);
+   // print(newProduct);
 
     // Save the updated product list back to SharedPreferences
     await prefs.setString('productsList', jsonEncode(productsList));
@@ -148,6 +149,18 @@ class ProductinfoScreen extends StatelessWidget {
                         _addToCart(
                             context, id, name, imageUrl, description, price);
                         const SnackBar(content: Text('Added to Cart'));
+
+                        final snackBar = SnackBar(
+                          content: Text('$name ADDED TO CART'),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            onPressed: () {
+                              // Some action to undo something.
+                            },
+                          ),
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         // Navigator.pushNamed(context, '/cart');
                       },
                     ),
