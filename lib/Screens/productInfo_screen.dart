@@ -34,7 +34,7 @@ class ProductinfoScreen extends StatelessWidget {
     };
 
     productsList.add(newProduct);
-   // print(newProduct);
+    // print(newProduct);
 
     // Save the updated product list back to SharedPreferences
     await prefs.setString('productsList', jsonEncode(productsList));
@@ -151,6 +151,7 @@ class ProductinfoScreen extends StatelessWidget {
                         const SnackBar(content: Text('Added to Cart'));
 
                         final snackBar = SnackBar(
+                          duration: const Duration(milliseconds: 200),
                           content: Text('$name ADDED TO CART'),
                           action: SnackBarAction(
                             label: 'Undo',

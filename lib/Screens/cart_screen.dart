@@ -288,7 +288,7 @@ void _orderSuccess(BuildContext context, String total) {
           Navigator.pushNamed(context, '/orders');
         },
         child: Container(
-          height: 280, width: double.infinity,
+          height: 300, width: double.infinity,
           margin: const EdgeInsets.all(
               15.0), // Add margin to float above the bottom
           decoration: BoxDecoration(
@@ -300,13 +300,16 @@ void _orderSuccess(BuildContext context, String total) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                spaceBox(h: 8),
+                const MyText('ORDER PLACED SUCCESSFULLY'),
+                spaceBox(h: 8),
                 SizedBox(
                     height: 180,
                     child: LottieBuilder.asset(
                       'assets/lottie_animations/cart.json',
                     )),
                 spaceBox(h: 15),
-                const MyText('Proceed to Order Page')
+                const MyText('Proceed to Orders Page')
               ],
             ),
           ),

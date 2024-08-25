@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:sanlak/Core/AppProvider.dart';
+import 'package:sanlak/Screens/cart_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,13 +19,34 @@ Future<Map<String, dynamic>> createRequestBody() async {
   final String orderDateTime = DateTime.now().toString();
   final String status = prefs.getString('status') ?? '';
 
+  List<dynamic> productsList0 = [];
+
+  final temp = prefs.getString('productsList') ?? '[]';
+
+  productsList0 = jsonDecode(productsJson);
+  //  print(_productsList.length);
+
+  final cartItems = productsList0.map((product) {
+    return Product(
+      productId: product['productId'] ?? '',
+      name: product['name'] ?? '',
+      price: product['price']?.toDouble() ?? 0.0,
+      quantity: product['quantity'] ?? 1,
+      totalPrice: product['total_price']?.toDouble() ?? 0.0,
+    );
+  }).toList();
+
+  // Calculate the total value
+  final totalCartValue = calculateTotalCartValue(cartItems);
+
+  print('😎😎 $totalCartValue');
   // Creating the request body
   final Map<String, dynamic> requestBody = {
     "uid": uid,
     "products": productsList,
     "address": address,
     "payment_mode": paymentMode,
-    "total_amount": totalAmount,
+    "total_amount": totalCartValue,
     "order_date_time": orderDateTime,
     "status": status,
   };
