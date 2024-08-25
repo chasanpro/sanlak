@@ -15,17 +15,12 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  bool isLoggedIN = false;
-
   Future<List<Map<String, dynamic>>> fetchOrders() async {
     final prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString('uid') ?? '';
 
-    if (uid.isNotEmpty) {
-      setState(() {
-        isLoggedIN = true;
-      });
-    } else {
+    if (uid.isEmpty) {
+      // If the UID is empty, return an empty list immediately
       return [];
     }
 
@@ -34,12 +29,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
       'Authorization': 'Bearer $apiKey', // Replace with your API key
       'Content-Type': 'application/json',
     };
+
     String url =
         'https://ap-south-1.aws.data.mongodb-api.com/app/data-gxmmnfs/endpoint/getUserOrders?uid=$uid'; // Replace with your actual endpoint
 
     try {
       final response = await http.get(Uri.parse(url), headers: headers);
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -78,9 +74,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!isLoggedIN ||
-              !snapshot.hasData ||
-              snapshot.data!.isEmpty) {
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
