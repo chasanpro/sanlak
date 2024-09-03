@@ -1,3 +1,5 @@
+My Flutter Notes: https://docs.google.com/document/d/1f1wJNq9mHklXcL6qbZB_Tn8qwljLrXx6WLoDMDXXP7U/edit?usp=sharing
+
 Here's a summary of your project details:- 
 **Technology Stack**:
   - **Flutter**: Used for developing the application across platforms (web, Android, iOS).
